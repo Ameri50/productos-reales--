@@ -62,7 +62,7 @@ test("server sends the key to Gemini and returns only the response text", async 
     assert.equal(body.contents[0].role, "user");
     assert.equal(body.generationConfig.thinkingConfig.thinkingLevel, "minimal");
     return { ok: true, status: 200, json: async () => ({
-      candidates: [{ content: { parts: [{ text: "Hola, ¿en qué te ayudo?" }] } }],
+      candidates: [{ content: { parts: [{ text: "Hola, ¿en qué te ayudo? La reserva dura **24 horas**." }] } }],
     }) };
   };
   const res = response();
@@ -72,7 +72,7 @@ test("server sends the key to Gemini and returns only the response text", async 
     body: { turns: [{ role: "model", text: "Hola" }, { role: "user", text: "Consulta" }] },
   }, res);
   assert.equal(res.statusCode, 200);
-  assert.deepEqual(res.body, { message: "Hola, ¿en qué te ayudo?" });
+  assert.deepEqual(res.body, { message: "Hola, ¿en qué te ayudo? La reserva dura 24 horas." });
 });
 
 test("upstream timeouts return a clear error within the configured limit", async (t) => {

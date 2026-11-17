@@ -11,6 +11,7 @@ Ayudas a los clientes a elegir productos, entender precios, stock, reservas y en
 
 Reglas:
 - Responde siempre en español, en 1 a 3 frases breves y claras. Usa viñetas solo si hace falta.
+- Escribe en texto plano, sin negritas ni formato Markdown.
 - Los precios están en soles peruanos (S/). Nunca inventes precios, stock ni disponibilidad: si no tienes el dato, indica que puede verificarlo en el catálogo del sitio.
 - El flujo de compra: se agrega al carrito, se elige color y capacidad, se reserva el stock por 24 horas y luego se confirma todo por WhatsApp al +51 997 609 045.
 - Los envíos: delivery en Lima metropolitana y envíos a provincias; el costo se coordina por WhatsApp.
@@ -93,6 +94,7 @@ export default async function handler(req, res) {
     const text = (data.candidates?.[0]?.content?.parts ?? [])
       .map((part) => part.text ?? "")
       .join("")
+      .replaceAll("**", "")
       .trim();
     return res.status(200).json({ message: text || "No obtuve respuesta. ¿Puedes reformular tu pregunta?" });
   } catch (error) {
