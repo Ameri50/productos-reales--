@@ -1,4 +1,4 @@
-const MODEL = "gemini-3.5-flash";
+const MODEL = "gemini-3.8-flash";
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 const API_KEY = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined)?.trim() ?? "";
@@ -49,14 +49,19 @@ export async function askGemini(turns: ChatTurn[]): Promise<string> {
 
   let lastStatus = 0;
 
-  for (let attempt = 0; attempt < 2; attempt += 1) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
     const response = await fetch(`${ENDPOINT}?key=${encodeURIComponent(API_KEY)}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
         contents,
-        generationConfig: { temperature: 0.6, topP: 0.9, maxOutputTokens: 700 },
+        generationConfig: {
+          temperature: 0.6,
+          topP: 0.9,
+          maxOutputTokens: 700,
+          thinkingConfig: { thinkingBudget: 0 },
+        },
       }),
     });
 
@@ -67,7 +72,7 @@ export async function askGemini(turns: ChatTurn[]): Promise<string> {
 
     lastStatus = response.status;
     if (response.status !== 503 && response.status !== 429) break;
-    await new Promise((resolve) => window.setTimeout(resolve, 900 * (attempt + 1)));
+    await new Promise((resolve) => window.setTimeout(resolve, 600 * (attempt + 1)));
   }
 
   if (lastStatus === 503 || lastStatus === 429) throw new Error(FRIENDLY_BUSY);
