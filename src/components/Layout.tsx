@@ -15,6 +15,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { ChatWidget } from "@/components/ChatWidget";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/format";
@@ -249,6 +250,8 @@ export function Layout() {
           );
         })}
       </nav>
+
+      <ChatWidget />
     </div>
   );
 }
