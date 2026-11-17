@@ -55,10 +55,12 @@ test("server sends the key to Gemini and returns only the response text", async 
     globalThis.fetch = originalFetch;
   });
   globalThis.fetch = async (url, options) => {
-    assert.match(url, /gemini-3\.8-flash:generateContent$/);
+    assert.match(url, /gemini-3\.5-flash-lite:generateContent$/);
     assert.equal(options.headers["x-goog-api-key"], "test-key");
+    assert.ok(options.signal instanceof AbortSignal);
     const body = JSON.parse(options.body);
     assert.equal(body.contents[0].role, "user");
+    assert.equal(body.generationConfig.thinkingConfig.thinkingLevel, "minimal");
     return { ok: true, status: 200, json: async () => ({
       candidates: [{ content: { parts: [{ text: "Hola, ¿en qué te ayudo?" }] } }],
     }) };
@@ -71,4 +73,52 @@ test("server sends the key to Gemini and returns only the response text", async 
   }, res);
   assert.equal(res.statusCode, 200);
   assert.deepEqual(res.body, { message: "Hola, ¿en qué te ayudo?" });
+});
+
+test("upstream timeouts return a clear error within the configured limit", async (t) => {
+  const originalKey = process.env.GEMINI_API_KEY;
+  const originalFetch = globalThis.fetch;
+  const originalError = console.error;
+  process.env.GEMINI_API_KEY = "test-key";
+  console.error = () => {};
+  t.after(() => {
+    if (originalKey === undefined) delete process.env.GEMINI_API_KEY;
+    else process.env.GEMINI_API_KEY = originalKey;
+    globalThis.fetch = originalFetch;
+    console.error = originalError;
+  });
+  globalThis.fetch = async (_url, { signal }) => new Promise((_resolve, reject) => {
+    signal.addEventListener("abort", () => reject(signal.reason), { once: true });
+  });
+  const res = response();
+  const started = Date.now();
+  await handler({ method: "POST", headers: {}, body: { turns: [{ role: "user", text: "Hola" }] } }, res);
+  const elapsed = Date.now() - started;
+  assert.ok(elapsed >= 9_000 && elapsed < 12_000, `timeout took ${elapsed}ms`);
+  assert.equal(res.statusCode, 504);
+  assert.match(res.body.message, /tardó demasiado/);
+});
+
+test("quota errors are returned without retrying", async (t) => {
+  const originalKey = process.env.GEMINI_API_KEY;
+  const originalFetch = globalThis.fetch;
+  const originalError = console.error;
+  process.env.GEMINI_API_KEY = "test-key";
+  console.error = () => {};
+  t.after(() => {
+    if (originalKey === undefined) delete process.env.GEMINI_API_KEY;
+    else process.env.GEMINI_API_KEY = originalKey;
+    globalThis.fetch = originalFetch;
+    console.error = originalError;
+  });
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls += 1;
+    return { ok: false, status: 429 };
+  };
+  const res = response();
+  await handler({ method: "POST", headers: {}, body: { turns: [{ role: "user", text: "Hola" }] } }, res);
+  assert.equal(calls, 1);
+  assert.equal(res.statusCode, 503);
+  assert.match(res.body.message, /saturado/);
 });

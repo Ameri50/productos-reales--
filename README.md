@@ -66,6 +66,8 @@ Firebase vive en `src/lib/firebase.ts`. Para el chat:
 
 La función limita los orígenes permitidos para navegadores, pero esto no impide llamadas directas.
 Configura límites de consumo y protección contra abuso antes de usar el chat en producción.
+El chat usa Gemini 3.5 Flash-Lite para reducir la latencia y muestra un error si el servicio tarda
+demasiado o alcanza su cuota.
 Para probar la función localmente se necesita el entorno de funciones de Vercel; `npm run dev`
 solo inicia el frontend y usa la función desplegada.
 

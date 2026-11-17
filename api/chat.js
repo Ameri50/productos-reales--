@@ -1,4 +1,4 @@
-const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent";
+const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent";
 const ALLOWED_ORIGINS = new Set([
   "https://productos-reales.vercel.app",
   "https://ameri50.github.io",
@@ -20,6 +20,7 @@ Reglas:
 
 const BUSY = "El asistente está saturado en este momento. Espera unos segundos e inténtalo otra vez.";
 const UNAVAILABLE = "No pude conectar con el asistente. Inténtalo de nuevo.";
+const TIMEOUT = "El asistente tardó demasiado en responder. Inténtalo de nuevo.";
 
 export default async function handler(req, res) {
   const origin = req.headers.origin;
@@ -61,27 +62,27 @@ export default async function handler(req, res) {
     .slice(turns.findIndex((turn) => turn.role === "user"))
     .map((turn) => ({ role: turn.role, parts: [{ text: turn.text }] }));
 
+  const signal = AbortSignal.timeout(10_000);
   try {
-    let response;
-    for (let attempt = 0; attempt < 3; attempt += 1) {
-      response = await fetch(ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents,
-          generationConfig: {
-            maxOutputTokens: 2048,
-            thinkingConfig: { thinkingLevel: "low" },
-          },
-        }),
-      });
-      if (response.status !== 503 && response.status !== 429) break;
-      if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 600 * (attempt + 1)));
-    }
+    const response = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+      signal,
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents,
+        generationConfig: {
+          maxOutputTokens: 1024,
+          thinkingConfig: { thinkingLevel: "minimal" },
+        },
+      }),
+    });
 
     if (!response.ok) {
       console.error("Error de Gemini:", response.status);
+      if (response.status === 401 || response.status === 403) {
+        return res.status(502).json({ message: "La clave de Gemini no es válida o no tiene acceso al modelo." });
+      }
       return res.status(response.status === 429 || response.status === 503 ? 503 : 502)
         .json({ message: response.status === 429 || response.status === 503 ? BUSY : UNAVAILABLE });
     }
@@ -96,6 +97,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ message: text || "No obtuve respuesta. ¿Puedes reformular tu pregunta?" });
   } catch (error) {
     console.error("Error al consultar Gemini:", error instanceof Error ? error.message : "Error desconocido");
+    if (signal.aborted) return res.status(504).json({ message: TIMEOUT });
     return res.status(502).json({ message: UNAVAILABLE });
   }
 }
