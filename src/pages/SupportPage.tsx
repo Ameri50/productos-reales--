@@ -81,7 +81,7 @@ export function SupportPage() {
           const Icon = channel.icon;
           return (
             <div key={channel.title} className="card-surface flex flex-col p-5">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#0a84ff]/10 text-[#0a84ff]">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-accent/10 text-accent">
                 <Icon size={18} />
               </span>
               <p className="mt-3 font-semibold">{channel.title}</p>
@@ -93,7 +93,7 @@ export function SupportPage() {
                   href={channel.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#0a84ff]"
+                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent"
                 >
                   {channel.action} <span aria-hidden>→</span>
                 </a>
@@ -108,7 +108,7 @@ export function SupportPage() {
           className="px-6 py-7 text-white"
           style={{
             backgroundImage:
-              "radial-gradient(600px 260px at 8% -20%, rgba(37,211,102,0.45), transparent 65%), radial-gradient(500px 240px at 100% 0%, rgba(10,132,255,0.4), transparent 65%)",
+              "radial-gradient(600px 260px at 8% -20%, rgba(255,255,255,0.16), transparent 65%), radial-gradient(500px 240px at 100% 0%, rgba(255,255,255,0.08), transparent 65%)",
             backgroundColor: "#0b0b0d",
           }}
         >
@@ -126,7 +126,7 @@ export function SupportPage() {
             href={`https://wa.me/${WHATSAPP_NUMBER}`}
             target="_blank"
             rel="noreferrer"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25d366] px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-95"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-zinc-200"
           >
             <MessageCircle size={16} /> Abrir WhatsApp
           </a>
@@ -188,7 +188,7 @@ export function SupportPage() {
               to={item.to}
               className="card-surface flex gap-3 p-4 transition hover:-translate-y-0.5"
             >
-              <span className="mt-0.5 text-[#0a84ff]">
+              <span className="mt-0.5 text-accent">
                 <Icon size={18} />
               </span>
               <div>

@@ -160,7 +160,7 @@ export function HistoryPage() {
         </p>
         <Link
           to="/ingresar?next=/historial"
-          className="mt-5 inline-flex rounded-full bg-[#0a84ff] px-5 py-2.5 text-sm font-semibold text-white"
+          className="mt-5 inline-flex rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
         >
           Ingresar
         </Link>
@@ -226,7 +226,7 @@ export function HistoryPage() {
           </p>
           <Link
             to="/tienda"
-            className="mt-4 inline-flex rounded-full bg-[#0a84ff] px-4 py-2 text-sm font-semibold text-white"
+            className="mt-4 inline-flex rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white"
           >
             Ir a la tienda
           </Link>
@@ -284,7 +284,7 @@ export function HistoryPage() {
                       {formatPrice(order.total)}
                     </span>
                     {status === "reserved" && (
-                      <span className="ml-2 inline-flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+                      <span className="ml-2 inline-flex items-center gap-1 text-xs text-accent">
                         <Clock3 size={12} />
                         <Countdown target={order.expiresAt} />
                       </span>
@@ -305,7 +305,7 @@ export function HistoryPage() {
                         type="button"
                         onClick={() => void cancel(order)}
                         disabled={busy}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-black/10 px-3 py-1.5 text-xs font-semibold transition hover:bg-amber-500/10 disabled:opacity-50 dark:border-white/15"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-black/10 px-3 py-1.5 text-xs font-semibold transition hover:bg-black/[0.04] disabled:opacity-50 dark:border-white/15 dark:hover:bg-white/10"
                       >
                         {busy ? (
                           <Loader2 size={14} className="animate-spin" />

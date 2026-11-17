@@ -44,7 +44,7 @@ export function ProductCard({ product }: { product: Product }) {
           </span>
         ) : (
           stock <= 3 && (
-            <span className="absolute right-3 top-3 rounded-full bg-amber-500/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
+            <span className="absolute right-3 top-3 rounded-full bg-brand px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
               Últimas {stock}
             </span>
           )
@@ -54,7 +54,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="flex flex-1 flex-col gap-2 p-4">
         <Link
           to={`/producto/${product.id}`}
-          className="line-clamp-2 font-semibold leading-snug transition group-hover:text-[#0a84ff]"
+          className="line-clamp-2 font-semibold leading-snug transition group-hover:text-accent"
         >
           {product.name}
         </Link>
@@ -98,7 +98,7 @@ export function ProductCard({ product }: { product: Product }) {
             onClick={quickAdd}
             disabled={soldOut || stock <= 0}
             aria-label={`Agregar ${product.name} al carrito`}
-            className="grid h-9 w-9 place-items-center rounded-full bg-[#0a84ff] text-white shadow-[0_10px_20px_-12px_rgba(10,132,255,0.9)] transition hover:bg-[#0077ed] disabled:cursor-not-allowed disabled:bg-zinc-300 disabled:text-zinc-500 disabled:shadow-none dark:disabled:bg-white/10 dark:disabled:text-zinc-500"
+            className="grid h-9 w-9 place-items-center rounded-full bg-brand text-white shadow-[0_10px_20px_-12px_rgba(0,0,0,0.5)] transition hover:bg-brand-strong disabled:cursor-not-allowed disabled:bg-zinc-300 disabled:text-zinc-500 disabled:shadow-none dark:disabled:bg-white/10 dark:disabled:text-zinc-500"
           >
             {added ? <Check size={17} /> : <Plus size={18} />}
           </button>

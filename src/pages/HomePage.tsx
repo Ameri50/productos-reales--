@@ -43,7 +43,7 @@ export function HomePage() {
         className="relative overflow-hidden rounded-[32px] bg-[#0b0b0d] px-6 py-12 text-white sm:px-10 sm:py-16"
         style={{
           backgroundImage:
-            "radial-gradient(900px 420px at 12% -10%, rgba(10,132,255,0.42), transparent 60%), radial-gradient(700px 380px at 92% 8%, rgba(168,85,247,0.32), transparent 62%)",
+            "radial-gradient(900px 420px at 12% -10%, rgba(255,255,255,0.16), transparent 60%), radial-gradient(700px 380px at 92% 8%, rgba(255,255,255,0.07), transparent 62%)",
         }}
       >
         <div className="max-w-2xl animate-rise">
@@ -53,7 +53,7 @@ export function HomePage() {
           <h1 className="mt-5 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
             Todo el ecosistema Apple,
             <br />
-            <span className="bg-gradient-to-r from-[#6eb9ff] via-white to-[#c7b4ff] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
               reservado en 24 horas.
             </span>
           </h1>
@@ -117,7 +117,7 @@ export function HomePage() {
           </div>
           <Link
             to="/tienda"
-            className="hidden shrink-0 items-center gap-1 text-sm font-semibold text-[#0a84ff] sm:inline-flex"
+            className="hidden shrink-0 items-center gap-1 text-sm font-semibold text-accent sm:inline-flex"
           >
             Ver todo <ArrowRight size={15} />
           </Link>
@@ -128,7 +128,7 @@ export function HomePage() {
             <Link
               key={category}
               to={`/tienda?categoria=${encodeURIComponent(category)}`}
-              className="card-surface snap-start whitespace-nowrap px-5 py-3.5 text-sm font-medium transition hover:-translate-y-0.5 hover:text-[#0a84ff]"
+              className="card-surface snap-start whitespace-nowrap px-5 py-3.5 text-sm font-medium transition hover:-translate-y-0.5 hover:text-accent"
             >
               {category}
             </Link>
@@ -148,7 +148,7 @@ export function HomePage() {
           </div>
           <Link
             to="/tienda"
-            className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-[#0a84ff]"
+            className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-accent"
           >
             Ver todo <ArrowRight size={15} />
           </Link>
@@ -182,7 +182,7 @@ export function HomePage() {
           return (
             <div key={step.title} className="card-surface p-5">
               <div className="flex items-center gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#0a84ff]/10 text-[#0a84ff]">
+                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-accent/10 text-accent">
                   <Icon size={19} />
                 </span>
                 <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
@@ -219,7 +219,7 @@ export function HomePage() {
           const Icon = item.icon;
           return (
             <div key={item.title} className="flex gap-3">
-              <span className="mt-0.5 text-[#0a84ff]">
+              <span className="mt-0.5 text-accent">
                 <Icon size={20} />
               </span>
               <div>

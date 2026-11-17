@@ -109,7 +109,7 @@ export function Layout() {
             >
               <ShoppingBag size={19} />
               {count > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#0a84ff] px-1 text-[10px] font-semibold text-white">
+                <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-brand px-1 text-[10px] font-semibold text-white">
                   {count}
                 </span>
               )}
@@ -120,7 +120,7 @@ export function Layout() {
                 to="/perfil"
                 className="ml-1 hidden items-center gap-2 rounded-full border border-black/10 py-1.5 pl-1.5 pr-3.5 text-sm font-medium transition hover:bg-black/[0.04] sm:flex dark:border-white/15 dark:hover:bg-white/10"
               >
-                <span className="grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br from-[#0a84ff] to-[#1d4ed8] text-[11px] font-semibold text-white">
+                <span className="grid h-7 w-7 place-items-center rounded-full bg-zinc-900 text-[11px] font-semibold text-white dark:bg-zinc-100 dark:text-zinc-900">
                   {displayName.slice(0, 1).toUpperCase()}
                 </span>
                 <span className="max-w-24 truncate">{displayName}</span>
@@ -128,7 +128,7 @@ export function Layout() {
             ) : (
               <Link
                 to="/ingresar"
-                className="ml-1 hidden rounded-full bg-[#0a84ff] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_24px_-12px_rgba(10,132,255,0.9)] transition hover:bg-[#0077ed] sm:block"
+                className="ml-1 hidden rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_24px_-12px_rgba(0,0,0,0.55)] transition hover:bg-brand-strong sm:block"
               >
                 Ingresar
               </Link>
@@ -143,7 +143,7 @@ export function Layout() {
                 {count} producto{count === 1 ? "" : "s"} en tu carrito · reserva
                 de 24 h
               </span>
-              <Link to="/carrito" className="font-semibold text-[#0a84ff]">
+              <Link to="/carrito" className="font-semibold text-accent">
                 Ver carrito · {formatPrice(total)}
               </Link>
             </div>
@@ -170,13 +170,13 @@ export function Layout() {
             <ul className="space-y-2 text-zinc-500 dark:text-zinc-400">
               {NAV.slice(1, 4).map((item) => (
                 <li key={item.to}>
-                  <Link to={item.to} className="transition hover:text-[#0a84ff]">
+                  <Link to={item.to} className="transition hover:text-accent">
                     {item.label}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link to="/nosotros" className="transition hover:text-[#0a84ff]">
+                <Link to="/nosotros" className="transition hover:text-accent">
                   Nosotros
                 </Link>
               </li>
@@ -187,17 +187,17 @@ export function Layout() {
             <p className="mb-3 font-semibold">Cuenta</p>
             <ul className="space-y-2 text-zinc-500 dark:text-zinc-400">
               <li>
-                <Link to="/perfil" className="transition hover:text-[#0a84ff]">
+                <Link to="/perfil" className="transition hover:text-accent">
                   Mi perfil
                 </Link>
               </li>
               <li>
-                <Link to="/historial" className="transition hover:text-[#0a84ff]">
+                <Link to="/historial" className="transition hover:text-accent">
                   Mis reservas y pedidos
                 </Link>
               </li>
               <li>
-                <Link to="/carrito" className="transition hover:text-[#0a84ff]">
+                <Link to="/carrito" className="transition hover:text-accent">
                   Carrito
                 </Link>
               </li>
@@ -210,7 +210,7 @@ export function Layout() {
               href={`https://wa.me/${WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-[#25d366]/12 px-3 py-1.5 font-medium text-[#0f8f45] transition hover:bg-[#25d366]/20 dark:text-[#4ade80]"
+              className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1.5 font-medium text-accent transition hover:bg-brand/20"
             >
               WhatsApp {WHATSAPP_DISPLAY}
             </a>
@@ -238,7 +238,7 @@ export function Layout() {
                 [
                   "flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition",
                   isActive
-                    ? "text-[#0a84ff]"
+                    ? "text-accent"
                     : "text-zinc-500 dark:text-zinc-400",
                 ].join(" ")
               }

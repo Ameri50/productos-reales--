@@ -75,7 +75,7 @@ export function CartPage() {
   if (order) {
     return (
       <div className="mx-auto max-w-xl space-y-5 py-6 text-center">
-        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-500/12 text-emerald-600 dark:text-emerald-400">
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-accent/10 text-accent">
           <CheckCircle2 size={34} />
         </div>
         <div>
@@ -107,13 +107,13 @@ export function CartPage() {
             <span className="text-zinc-500 dark:text-zinc-400">
               Reserva válida
             </span>
-            <span className="inline-flex items-center gap-1.5 font-semibold text-amber-600 dark:text-amber-400">
+            <span className="inline-flex items-center gap-1.5 font-semibold text-accent">
               <Clock3 size={14} />
               <Countdown target={order.expiresAt} />
             </span>
           </div>
 
-          <p className="rounded-2xl bg-[#0a84ff]/8 px-4 py-3 text-xs leading-relaxed text-[#0a84ff]">
+          <p className="rounded-2xl bg-accent/8 px-4 py-3 text-xs leading-relaxed text-accent">
             Envía el detalle por WhatsApp para confirmar la compra. Si la
             reserva vence, el producto vuelve a estar disponible.
           </p>
@@ -122,7 +122,7 @@ export function CartPage() {
             href={buildWhatsAppUrl(order, displayName)}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25d366] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-95"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-strong"
           >
             <MessageCircle size={17} /> Abrir WhatsApp
           </a>
@@ -131,7 +131,7 @@ export function CartPage() {
         <div className="flex flex-col gap-2 sm:flex-row">
           <Link
             to="/historial"
-            className="flex-1 rounded-full bg-[#0a84ff] px-5 py-3 text-sm font-semibold text-white"
+            className="flex-1 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white"
           >
             Ver mi historial
           </Link>
@@ -158,7 +158,7 @@ export function CartPage() {
         </p>
         <Link
           to="/tienda"
-          className="mt-5 inline-flex rounded-full bg-[#0a84ff] px-5 py-2.5 text-sm font-semibold text-white"
+          className="mt-5 inline-flex rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
         >
           Explorar la tienda
         </Link>
@@ -212,7 +212,7 @@ export function CartPage() {
                 <div className="flex items-start justify-between gap-2">
                   <Link
                     to={`/producto/${line.productId}`}
-                    className="line-clamp-2 text-sm font-semibold leading-snug transition hover:text-[#0a84ff] sm:text-[15px]"
+                    className="line-clamp-2 text-sm font-semibold leading-snug transition hover:text-accent sm:text-[15px]"
                   >
                     {line.name}
                   </Link>
@@ -275,7 +275,7 @@ export function CartPage() {
 
           <Link
             to="/tienda"
-            className="inline-flex items-center gap-1 text-sm font-semibold text-[#0a84ff]"
+            className="inline-flex items-center gap-1 text-sm font-semibold text-accent"
           >
             ← Seguir comprando
           </Link>
@@ -302,7 +302,7 @@ export function CartPage() {
           </div>
 
           {!user && (
-            <p className="rounded-2xl bg-amber-500/10 px-4 py-3 text-xs leading-relaxed text-amber-700 dark:text-amber-300">
+            <p className="rounded-2xl bg-black/[0.04] px-4 py-3 text-xs leading-relaxed text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
               Inicia sesión para que tu reserva quede guardada y puedas seguirla
               en el historial.
             </p>
@@ -318,7 +318,7 @@ export function CartPage() {
             type="button"
             onClick={() => void checkout()}
             disabled={submitting}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25d366] px-5 py-3.5 text-sm font-semibold text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-strong disabled:cursor-not-allowed disabled:opacity-70"
           >
             {submitting ? (
               <Loader2 size={17} className="animate-spin" />

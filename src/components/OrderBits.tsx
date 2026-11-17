@@ -23,12 +23,11 @@ const STATUS_STYLES: Record<OrderStatus, { label: string; className: string }> =
   reserved: {
     label: "Reservado",
     className:
-      "bg-amber-500/12 text-amber-700 dark:bg-amber-400/15 dark:text-amber-300",
+      "border border-black/15 text-zinc-700 dark:border-white/20 dark:text-zinc-200",
   },
   confirmed: {
     label: "Confirmado",
-    className:
-      "bg-emerald-500/12 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300",
+    className: "bg-brand text-white",
   },
   cancelled: {
     label: "Cancelado",

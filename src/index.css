@@ -5,9 +5,11 @@
 @theme {
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --color-brand: #0a84ff;
-  --color-brand-soft: #e8f2ff;
-  --color-price: #0a7f43;
+  --color-brand: var(--brand-fill);
+  --color-brand-strong: var(--brand-fill-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--brand-accent);
+  --color-price: var(--brand-accent);
 
   --animate-rise: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 
@@ -23,6 +25,20 @@
   }
 }
 
+:root {
+  --brand-fill: #18181b;
+  --brand-fill-strong: #000000;
+  --brand-soft: #f4f4f5;
+  --brand-accent: #18181b;
+}
+
+.dark {
+  --brand-fill: #3f3f46;
+  --brand-fill-strong: #52525b;
+  --brand-soft: #27272a;
+  --brand-accent: #ffffff;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -35,7 +51,7 @@
   }
 
   ::selection {
-    @apply bg-[#0a84ff]/25;
+    @apply bg-brand/25;
   }
 
   input,
@@ -56,7 +72,7 @@
   }
 
   .field {
-    @apply w-full rounded-xl border border-black/10 bg-white py-3 text-sm outline-none transition placeholder:text-zinc-400 focus:border-[#0a84ff] focus:ring-4 focus:ring-[#0a84ff]/15 dark:border-white/15 dark:bg-[#1b1b1e] dark:placeholder:text-zinc-500;
+    @apply w-full rounded-xl border border-black/10 bg-white py-3 text-sm outline-none transition placeholder:text-zinc-400 focus:border-accent focus:ring-4 focus:ring-accent/15 dark:border-white/15 dark:bg-[#1b1b1e] dark:placeholder:text-zinc-500;
   }
 
   .no-scrollbar::-webkit-scrollbar {

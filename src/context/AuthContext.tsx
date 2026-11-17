@@ -9,9 +9,11 @@ import {
 } from "react";
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
   type User,
@@ -30,6 +32,15 @@ const AUTH_ERRORS: Record<string, string> = {
   "auth/user-not-found": "No existe una cuenta con ese correo.",
   "auth/wrong-password": "La contraseña es incorrecta.",
   "auth/invalid-credential": "Correo o contraseña incorrectos.",
+  "auth/popup-blocked":
+    "El navegador bloqueó la ventana de Google. Permite las ventanas emergentes e inténtalo otra vez.",
+  "auth/popup-closed-by-user": "Cerraste la ventana de Google antes de terminar.",
+  "auth/cancelled-popup-request":
+    "Se canceló el inicio de sesión con Google. Inténtalo de nuevo.",
+  "auth/account-exists-with-different-credential":
+    "Ese correo ya usa otro método de acceso. Entra con tu contraseña.",
+  "auth/unauthorized-domain":
+    "Este dominio todavía no está autorizado en Firebase Auth.",
   "auth/email-already-in-use": "Ese correo ya está registrado. Inicia sesión.",
   "auth/weak-password": "La contraseña debe tener al menos 6 caracteres.",
   "auth/too-many-requests":
@@ -37,7 +48,7 @@ const AUTH_ERRORS: Record<string, string> = {
   "auth/network-request-failed":
     "Sin conexión con el servidor. Revisa tu internet.",
   "auth/operation-not-allowed":
-    "El acceso con correo y contraseña no está habilitado en Firebase.",
+    "Ese método de acceso no está habilitado en Firebase.",
 };
 
 export function authErrorMessage(error: unknown): string {
@@ -68,6 +79,7 @@ type AuthContextValue = {
   isAdmin: boolean;
   displayName: string;
   signIn: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signUp: (name: string, email: string, password: string) => Promise<void>;
   signOutUser: () => Promise<void>;
   saveProfile: (updates: Partial<UserProfile>) => Promise<void>;
@@ -142,6 +154,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signInWithEmailAndPassword(auth, email.trim(), password);
   }, []);
 
+  const signInWithGoogle = useCallback(async () => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+    await signInWithPopup(auth, provider);
+  }, []);
+
   const signUp = useCallback(
     async (name: string, email: string, password: string) => {
       const credentials = await createUserWithEmailAndPassword(
@@ -209,6 +227,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       displayName:
         profile?.nombre?.trim() || user?.displayName?.trim() || "Cliente",
       signIn,
+      signInWithGoogle,
       signUp,
       signOutUser,
       saveProfile,
@@ -219,6 +238,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     profile,
     loading,
     signIn,
+    signInWithGoogle,
     signUp,
     signOutUser,
     saveProfile,

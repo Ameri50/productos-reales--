@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, Mail, UserRound } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { AuthDivider, GoogleButton } from "@/components/GoogleButton";
 import { authErrorMessage, useAuth } from "@/context/AuthContext";
 
 function AuthShell({
@@ -71,7 +72,7 @@ function PasswordField({
 }
 
 export function LoginPage() {
-  const { user, loading, signIn, resetPassword } = useAuth();
+  const { user, loading, signIn, signInWithGoogle, resetPassword } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const next = params.get("next") || "/";
@@ -80,10 +81,25 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
 
   if (!loading && user) {
     return <Navigate to={next} replace />;
   }
+
+  const google = async () => {
+    setGoogleBusy(true);
+    setError(null);
+    setNotice(null);
+    try {
+      await signInWithGoogle();
+      navigate(next, { replace: true });
+    } catch (caught) {
+      setError(authErrorMessage(caught));
+    } finally {
+      setGoogleBusy(false);
+    }
+  };
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -123,13 +139,20 @@ export function LoginPage() {
           ¿No tienes cuenta?{" "}
           <Link
             to={`/registro?next=${encodeURIComponent(next)}`}
-            className="font-semibold text-[#0a84ff]"
+            className="font-semibold text-accent"
           >
             Crear cuenta
           </Link>
         </>
       }
     >
+      <GoogleButton
+        onClick={() => void google()}
+        busy={googleBusy}
+        disabled={submitting}
+      />
+      <AuthDivider />
+
       <form onSubmit={submit} className="space-y-3">
         <div className="relative">
           <Mail
@@ -159,7 +182,7 @@ export function LoginPage() {
           </p>
         )}
         {notice && (
-          <p className="rounded-xl bg-emerald-500/10 px-3 py-2 text-xs text-emerald-700 dark:text-emerald-300">
+          <p className="rounded-xl bg-brand/10 px-3 py-2 text-xs text-accent">
             {notice}
           </p>
         )}
@@ -167,7 +190,7 @@ export function LoginPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0a84ff] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0077ed] disabled:opacity-70"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-strong disabled:opacity-70"
         >
           {submitting && <Loader2 size={16} className="animate-spin" />}
           Ingresar
@@ -178,13 +201,13 @@ export function LoginPage() {
         <button
           type="button"
           onClick={() => void forgot()}
-          className="font-medium text-zinc-500 transition hover:text-[#0a84ff] dark:text-zinc-400"
+          className="font-medium text-zinc-500 transition hover:text-accent dark:text-zinc-400"
         >
           ¿Olvidaste tu contraseña?
         </button>
         <Link
           to="/tienda"
-          className="font-medium text-zinc-500 transition hover:text-[#0a84ff] dark:text-zinc-400"
+          className="font-medium text-zinc-500 transition hover:text-accent dark:text-zinc-400"
         >
           Explorar sin cuenta
         </Link>
@@ -194,7 +217,7 @@ export function LoginPage() {
 }
 
 export function RegisterPage() {
-  const { user, loading, signUp } = useAuth();
+  const { user, loading, signUp, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const next = params.get("next") || "/";
@@ -204,6 +227,7 @@ export function RegisterPage() {
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
 
   useEffect(() => {
     setError(null);
@@ -212,6 +236,19 @@ export function RegisterPage() {
   if (!loading && user) {
     return <Navigate to={next} replace />;
   }
+
+  const google = async () => {
+    setGoogleBusy(true);
+    setError(null);
+    try {
+      await signInWithGoogle();
+      navigate(next, { replace: true });
+    } catch (caught) {
+      setError(authErrorMessage(caught));
+    } finally {
+      setGoogleBusy(false);
+    }
+  };
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -240,13 +277,21 @@ export function RegisterPage() {
           ¿Ya tienes cuenta?{" "}
           <Link
             to={`/ingresar?next=${encodeURIComponent(next)}`}
-            className="font-semibold text-[#0a84ff]"
+            className="font-semibold text-accent"
           >
             Iniciar sesión
           </Link>
         </>
       }
     >
+      <GoogleButton
+        onClick={() => void google()}
+        busy={googleBusy}
+        disabled={submitting}
+        label="Registrarme con Google"
+      />
+      <AuthDivider />
+
       <form onSubmit={submit} className="space-y-3">
         <div className="relative">
           <UserRound
@@ -311,7 +356,7 @@ export function RegisterPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0a84ff] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0077ed] disabled:opacity-70"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-strong disabled:opacity-70"
         >
           {submitting && <Loader2 size={16} className="animate-spin" />}
           Crear mi cuenta

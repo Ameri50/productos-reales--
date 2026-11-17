@@ -130,7 +130,7 @@ export function ShopPage() {
           <button
             type="button"
             onClick={() => void refresh()}
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#0a84ff] px-4 py-2 text-sm font-semibold text-white"
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white"
           >
             <RefreshCcw size={15} /> Reintentar
           </button>

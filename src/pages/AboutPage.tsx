@@ -8,7 +8,7 @@ export function AboutPage() {
   return (
     <div className="space-y-10">
       <header className="max-w-2xl">
-        <span className="inline-flex items-center gap-2 rounded-full bg-[#0a84ff]/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a84ff]">
+        <span className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
           <Sparkles size={13} /> Nosotros
         </span>
         <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
@@ -43,7 +43,7 @@ export function AboutPage() {
           const Icon = item.icon;
           return (
             <div key={item.title} className="card-surface p-5">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#0a84ff]/10 text-[#0a84ff]">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-accent/10 text-accent">
                 <Icon size={18} />
               </span>
               <p className="mt-3 font-semibold">{item.title}</p>
@@ -86,7 +86,7 @@ export function AboutPage() {
             href="https://wa.me/51997609045"
             target="_blank"
             rel="noreferrer"
-            className="font-semibold text-[#0a84ff]"
+            className="font-semibold text-accent"
           >
             +51 997 609 045
           </a>
@@ -97,7 +97,7 @@ export function AboutPage() {
       <div className="flex flex-wrap gap-2">
         <Link
           to="/tienda"
-          className="inline-flex items-center gap-2 rounded-full bg-[#0a84ff] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0077ed]"
+          className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-strong"
         >
           Ver catálogo <ArrowRight size={16} />
         </Link>

@@ -70,7 +70,7 @@ export function ProductDetailPage() {
         </p>
         <Link
           to="/tienda"
-          className="mt-5 inline-flex rounded-full bg-[#0a84ff] px-5 py-2.5 text-sm font-semibold text-white"
+          className="mt-5 inline-flex rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
         >
           Volver a la tienda
         </Link>
@@ -98,7 +98,7 @@ export function ProductDetailPage() {
     <div className="space-y-12">
       <Link
         to="/tienda"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 transition hover:text-[#0a84ff] dark:text-zinc-400"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 transition hover:text-accent dark:text-zinc-400"
       >
         <ArrowLeft size={15} /> Volver a la tienda
       </Link>
@@ -113,7 +113,7 @@ export function ProductDetailPage() {
         </div>
 
         <div className="flex flex-col">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a84ff]">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
             {product.category}
           </span>
           <h1 className="mt-2 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
@@ -159,7 +159,7 @@ export function ProductDetailPage() {
                     className={[
                       "relative grid h-10 w-10 place-items-center rounded-full border transition",
                       color === option.name
-                        ? "border-[#0a84ff] ring-2 ring-[#0a84ff]/25"
+                        ? "border-accent ring-2 ring-accent/25"
                         : "border-black/10 dark:border-white/20",
                     ].join(" ")}
                   >
@@ -194,7 +194,7 @@ export function ProductDetailPage() {
                       className={[
                         "rounded-2xl border px-4 py-2.5 text-left transition",
                         storage === option.capacity
-                          ? "border-[#0a84ff] bg-[#0a84ff]/8 text-[#0a84ff]"
+                          ? "border-accent bg-accent/8 text-accent"
                           : "border-black/10 hover:border-black/25 dark:border-white/15 dark:hover:border-white/30",
                       ].join(" ")}
                     >
@@ -252,7 +252,7 @@ export function ProductDetailPage() {
               type="button"
               onClick={() => handleAdd(false)}
               disabled={soldOut}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#0a84ff] px-5 py-3.5 text-sm font-semibold text-white shadow-[0_14px_30px_-16px_rgba(10,132,255,0.9)] transition hover:bg-[#0077ed] disabled:cursor-not-allowed disabled:bg-zinc-300 disabled:text-zinc-500 disabled:shadow-none dark:disabled:bg-white/10 dark:disabled:text-zinc-500"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-brand px-5 py-3.5 text-sm font-semibold text-white shadow-[0_14px_30px_-16px_rgba(0,0,0,0.55)] transition hover:bg-brand-strong disabled:cursor-not-allowed disabled:bg-zinc-300 disabled:text-zinc-500 disabled:shadow-none dark:disabled:bg-white/10 dark:disabled:text-zinc-500"
             >
               {added > 0 ? <Check size={17} /> : <ShoppingBag size={17} />}
               {added > 0
@@ -273,11 +273,11 @@ export function ProductDetailPage() {
 
           <ul className="mt-6 grid gap-2 text-[13px] text-zinc-600 dark:text-zinc-300">
             <li className="flex items-center gap-2">
-              <Clock3 size={15} className="text-[#0a84ff]" /> Reserva el stock
+              <Clock3 size={15} className="text-accent" /> Reserva el stock
               por 24 horas.
             </li>
             <li className="flex items-center gap-2">
-              <ShieldCheck size={15} className="text-[#0a84ff]" /> Confirmación
+              <ShieldCheck size={15} className="text-accent" /> Confirmación
               del pedido por WhatsApp.
             </li>
           </ul>

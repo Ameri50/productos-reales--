@@ -11,7 +11,8 @@ import {
   ShoppingBag,
   UserRound,
 } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth, authErrorMessage } from "@/context/AuthContext";
+import { AuthDivider, GoogleButton } from "@/components/GoogleButton";
 import { initials } from "@/lib/format";
 import { PANEL_URL, WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from "@/lib/types";
 
@@ -32,12 +33,22 @@ const EMPTY_FORM: FormState = {
 };
 
 export function ProfilePage() {
-  const { user, profile, loading, isAdmin, displayName, saveProfile, signOutUser } =
-    useAuth();
+  const {
+    user,
+    profile,
+    loading,
+    isAdmin,
+    displayName,
+    saveProfile,
+    signOutUser,
+    signInWithGoogle,
+  } = useAuth();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [googleBusy, setGoogleBusy] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!profile) return;
@@ -50,6 +61,18 @@ export function ProfilePage() {
     });
   }, [profile?.uid]);
 
+  const google = async () => {
+    setGoogleBusy(true);
+    setAuthError(null);
+    try {
+      await signInWithGoogle();
+    } catch (caught) {
+      setAuthError(authErrorMessage(caught));
+    } finally {
+      setGoogleBusy(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center py-20 text-zinc-400">
@@ -61,7 +84,7 @@ export function ProfilePage() {
   if (!user) {
     return (
       <div className="mx-auto max-w-md py-14 text-center">
-        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#0a84ff]/10 text-[#0a84ff]">
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-accent/10 text-accent">
           <UserRound size={30} />
         </div>
         <h1 className="mt-4 text-xl font-semibold">Tu cuenta</h1>
@@ -69,19 +92,32 @@ export function ProfilePage() {
           Inicia sesión para guardar tus datos, ver tus reservas y seguir tus
           pedidos.
         </p>
-        <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-          <Link
-            to="/ingresar"
-            className="flex-1 rounded-full bg-[#0a84ff] px-5 py-2.5 text-sm font-semibold text-white"
-          >
-            Ingresar
-          </Link>
-          <Link
-            to="/registro"
-            className="flex-1 rounded-full border border-black/10 px-5 py-2.5 text-sm font-semibold transition hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10"
-          >
-            Crear cuenta
-          </Link>
+        <div className="mt-6 space-y-3 text-left">
+          <GoogleButton
+            onClick={() => void google()}
+            busy={googleBusy}
+            label="Iniciar sesión con Google"
+          />
+          <AuthDivider />
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Link
+              to="/ingresar"
+              className="flex-1 rounded-full bg-brand px-5 py-2.5 text-center text-sm font-semibold text-white"
+            >
+              Ingresar con correo
+            </Link>
+            <Link
+              to="/registro"
+              className="flex-1 rounded-full border border-black/10 px-5 py-2.5 text-center text-sm font-semibold transition hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10"
+            >
+              Crear cuenta
+            </Link>
+          </div>
+          {authError && (
+            <p className="rounded-xl bg-red-500/10 px-3 py-2 text-xs text-red-600 dark:text-red-300">
+              {authError}
+            </p>
+          )}
         </div>
       </div>
     );
@@ -106,14 +142,14 @@ export function ProfilePage() {
   return (
     <div className="mx-auto max-w-2xl space-y-5">
       <div className="card-surface flex items-center gap-4 p-5">
-        <span className="grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-[#0a84ff] to-[#1d4ed8] text-lg font-semibold text-white">
+        <span className="grid h-14 w-14 place-items-center rounded-full bg-zinc-900 text-lg font-semibold text-white dark:bg-zinc-100 dark:text-zinc-900">
           {initials(form.nombre || displayName, user.email ?? "")}
         </span>
         <div className="min-w-0">
           <p className="flex items-center gap-2 truncate text-lg font-semibold">
             {form.nombre || displayName}
             {isAdmin && (
-              <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-300">
+              <span className="rounded-full bg-brand px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
                 Admin
               </span>
             )}
@@ -129,7 +165,7 @@ export function ProfilePage() {
           to="/historial"
           className="card-surface flex items-center gap-3 p-4 transition hover:-translate-y-0.5"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#0a84ff]/10 text-[#0a84ff]">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-accent/10 text-accent">
             <Clock3 size={17} />
           </span>
           <span className="text-sm font-medium">Historial</span>
@@ -138,7 +174,7 @@ export function ProfilePage() {
           to="/tienda"
           className="card-surface flex items-center gap-3 p-4 transition hover:-translate-y-0.5"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-accent/10 text-accent">
             <ShoppingBag size={17} />
           </span>
           <span className="text-sm font-medium">Tienda</span>
@@ -147,7 +183,7 @@ export function ProfilePage() {
           to="/nosotros"
           className="card-surface flex items-center gap-3 p-4 transition hover:-translate-y-0.5"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-accent/10 text-accent">
             <BadgeCheck size={17} />
           </span>
           <span className="text-sm font-medium">Nosotros</span>
@@ -210,7 +246,7 @@ export function ProfilePage() {
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0a84ff] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0077ed] disabled:opacity-70"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-strong disabled:opacity-70"
         >
           {saving ? (
             <Loader2 size={16} className="animate-spin" />

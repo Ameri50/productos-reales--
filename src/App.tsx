@@ -27,7 +27,7 @@ function NotFoundPage() {
       </p>
       <Link
         to="/"
-        className="mt-5 inline-flex rounded-full bg-[#0a84ff] px-5 py-2.5 text-sm font-semibold text-white"
+        className="mt-5 inline-flex rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
       >
         Volver al inicio
       </Link>
