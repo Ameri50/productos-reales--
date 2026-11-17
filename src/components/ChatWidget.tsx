@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Loader2, MessageCircle, SendHorizontal, X } from "lucide-react";
+import { Loader2, Maximize2, MessageCircle, Minimize2, SendHorizontal, X } from "lucide-react";
 import { askGemini, type ChatTurn } from "@/lib/gemini";
 
 const GREETING: ChatTurn = {
@@ -15,6 +15,7 @@ const QUICK_QUESTIONS = [
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [turns, setTurns] = useState<ChatTurn[]>([GREETING]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -75,7 +76,12 @@ export function ChatWidget() {
       {open && (
         <section
           aria-label="Chat de ayuda"
-          className="card-surface fixed bottom-40 left-4 right-4 z-50 flex max-h-[min(560px,calc(100dvh-13rem))] flex-col overflow-hidden sm:bottom-24 sm:left-auto sm:right-6 sm:w-[380px]"
+          className={[
+            "card-surface fixed z-50 flex flex-col overflow-hidden",
+            expanded
+              ? "inset-4 sm:inset-6"
+              : "bottom-40 left-4 right-4 max-h-[min(560px,calc(100dvh-13rem))] sm:bottom-24 sm:left-auto sm:right-6 sm:w-[380px]",
+          ].join(" ")}
         >
           <header className="flex items-center gap-3 border-b border-black/[0.06] px-4 py-3 dark:border-white/10">
             <img
@@ -93,15 +99,25 @@ export function ChatWidget() {
             </div>
             <button
               type="button"
+              onClick={() => setExpanded((value) => !value)}
+              aria-label={expanded ? "Reducir chat" : "Ampliar chat"}
+              aria-pressed={expanded}
+              title={expanded ? "Reducir chat" : "Ampliar chat"}
+              className="ml-auto grid h-8 w-8 shrink-0 place-items-center rounded-full text-zinc-500 transition hover:bg-black/5 dark:text-zinc-400 dark:hover:bg-white/10"
+            >
+              {expanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            </button>
+            <button
+              type="button"
               onClick={() => setOpen(false)}
               aria-label="Cerrar chat"
-              className="ml-auto grid h-8 w-8 place-items-center rounded-full text-zinc-500 transition hover:bg-black/5 dark:text-zinc-400 dark:hover:bg-white/10"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-zinc-500 transition hover:bg-black/5 dark:text-zinc-400 dark:hover:bg-white/10"
             >
               <X size={16} />
             </button>
           </header>
 
-          <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
+          <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-3">
             {turns.map((turn, index) => (
               <p
                 key={index}
