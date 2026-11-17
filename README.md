@@ -51,11 +51,23 @@ npm run preview   # sirve el build
 
 El workflow `.github/workflows/deploy-pages.yml` compila y publica en cada push a `main`.
 Solo hay que habilitar **Settings → Pages → Source: GitHub Actions**.
+El chat usa la función de Vercel indicada abajo; GitHub Pages no ejecuta funciones de servidor.
 
 ### Vercel
 
-Importa el repositorio como proyecto Vite (framework preset *Vite*). No requiere variables de
-entorno: la configuración pública de Firebase vive en `src/lib/firebase.ts`.
+Importa el repositorio como proyecto Vite (framework preset *Vite*). La configuración pública de
+Firebase vive en `src/lib/firebase.ts`. Para el chat:
+
+1. Crea una clave nueva de Gemini en Google AI Studio.
+2. En Vercel, añade `GEMINI_API_KEY` en **Settings → Environment Variables** para Production.
+   No uses el prefijo `VITE_` ni guardes la clave en el repositorio.
+3. Vuelve a desplegar en Vercel. Tanto Vercel como GitHub Pages usan
+   `https://productos-reales.vercel.app/api/chat`.
+
+La función limita los orígenes permitidos para navegadores, pero esto no impide llamadas directas.
+Configura límites de consumo y protección contra abuso antes de usar el chat en producción.
+Para probar la función localmente se necesita el entorno de funciones de Vercel; `npm run dev`
+solo inicia el frontend y usa la función desplegada.
 
 ## Modelo de datos (compartido con la app iOS)
 
